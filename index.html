@@ -33,10 +33,15 @@
       const password = document.getElementById("reg-password").value;
       const team_name = document.getElementById("reg-team").value;
 
-      fetch("https://test.blockfuselabs.com/api/register", {
+      fetch('https://test.blockfuselabs.com/api/register',{
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, team_name })
+        body: JSON.stringify({ 
+          name,
+          email,
+          password,
+          team_name
+        })
       })
       .then(res => res.json())
       .then(data => {
@@ -61,7 +66,7 @@
       const email = document.getElementById("login-email").value;
       const password = document.getElementById("login-password").value;
 
-      fetch("https://test.blockfuselabs.com/api/login", {
+      fetch('https://test.blockfuselabs.com/api/login', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
