@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register and Login</title>
+</head>
+<body>
+  <h2>Register</h2>
+  <form id="register-form">
+    <input type="text" id="reg-name" placeholder="Full Name" required><br>
+    <input type="email" id="reg-email" placeholder="Email" required><br>
+    <input type="password" id="reg-password" placeholder="Password" required><br>
+    <input type="text" id="reg-team" placeholder="Team Name" required><br>
+    <button type="submit">Register</button>
+  </form>
+
+  <hr>
+
+  <h2>Login</h2>
+  <form id="login-form">
+    <input type="email" id="login-email" placeholder="Email" required><br>
+    <input type="password" id="login-password" placeholder="Password" required><br>
+    <button type="submit">Login</button>
+  </form>
+
+  <script>
+    // Register Logic
+    document.getElementById("register-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("reg-name").value;
+      const email = document.getElementById("reg-email").value;
+      const password = document.getElementById("reg-password").value;
+      const team_name = document.getElementById("reg-team").value;
+
+      fetch("https://test.blockfuselabs.com/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password, team_name })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Registration response:", data);
+        if (data.token || data.success) {
+          localStorage.setItem("user", JSON.stringify(data));
+          alert("Registration successful");
+          console.log("Registered user:", data);
+        } else {
+          alert("Registration failed: " + (data.message || "Unknown error"));
+        }
+      })
+      .catch(error => {
+        alert("Network error: " + error.message);
+      });
+    });
+
+    // Login Logic
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      fetch("https://test.blockfuselabs.com/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.token || data.success) {
+          localStorage.setItem("user", JSON.stringify(data));
+          alert("Login successful");
+          console.log("Logged-in user:", data);
+        } else {
+          alert("Login failed: " + (data.message || "Check your credentials"));
+        }
+      })
+      .catch(error => {
+        alert("Network error: " + error.message);
+      });
+    });
+  </script>
+</body>
+</html>
